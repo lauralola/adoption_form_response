@@ -17,3 +17,15 @@ logins = SHEET.worksheet('logins')
 data= logins.get_all_values()
 print(data)
 
+def get_user():
+    """
+    Gets user name and checks against login sheet
+    """
+    print('Enter your name')
+    print('Name must be between 2 and 15 letters long, with no numbers or special characters!')
+    print('Example: Laura \n')
+
+    data_name = input('Enter your name here: ')
+    print(f'Welcome {data_name}')
+
+get_user()
