@@ -1,3 +1,5 @@
+from datetime import date 
+import time
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -13,13 +15,12 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('adoption_form_responses')
 
 logins = SHEET.worksheet('logins')
-
-data= logins.get_all_values()
-print(data)
+response= SHEET.worksheet('response')
+date_col= response.col_values(1)
 
 def get_user():
     """
-    Gets user name and checks against login sheet
+    Initial prompt to run username input and check that only string between 2 and 15 letters returned
     """
     print('Enter your name')
     print('Name must be between 2 and 15 letters long, with no numbers or special characters!')
@@ -37,37 +38,36 @@ def get_user():
             print("Invalid entry! Your name must only contain letters\n")
             get_user()
         else:
-            # check spreadheet for user name if there:
-            print (f'Welcome back {name}')
-
-            # if not add to sheet and print welcome
-
+            logon_check(name)
         break;
 
+def logon_check(name):
+    """
+    Checks user name input against spreadsheet- if already on sheet grants access to edit records. 
+    If not asks if user has permission to access these
+    If yes- add user to sheet as record 
+    If no- brings back to initial page
+    """
+    data= logins.col_values(1)
 
-    # data_name = input('Enter your name here: ')
-    # validate_data(data_name)
-    # print(f'Welcome {data_name}')
+    for data in (data):
+        if name == data:
+            print (f'You have an account. Welcome back {name}')
+            # run function to change records
+        elif name != data:
+            permission= input('New user! Do you have permission to access records? y/n: \n')
+            if permission== 'y':
+            # run function to change records
+                logon_check(name)
+            elif permission == 'n':
+                print ('You do not have access \n')
+                get_user()
+            else:
+                print ('INVALID INPUT!')
+                logon_check(name)
+        break;
 
-# def validate_data(name):
-#     """
-#     Validates that only letters are entered between 2 and 15 letters long, no numbers or special characters
-#     """
-#     try:
-#         if len(name) <2:
-#             raise ValueError(
-#                 f'Name must be between 2 and 15 letters! {name} too short!'
-#             )
-#     except ValueError as e:
-#         print(f"Invalid data, {e}, please try again")
-
-#         try:
-#             if len(name) >15:           
-#                 raise ValueError(
-#                     f'Name must be between 2 and 15 letters! {name} is too long!'
-#                 )
-#         except ValueError as e:
-#             print(f"Invalid data, {e}, please try again")
-
+# function to change records by date- import date info- delete 6 months
+# function to highlight incorrect applications on sheet??
 
 get_user()
