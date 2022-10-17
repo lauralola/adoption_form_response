@@ -74,7 +74,7 @@ def add_user(name):
     Adds username to login spreadsheet- API error!!!!
     """
     print('Adding user details...\n')
-    logins.append_row(name)
+    SHEET.worksheet('logins').append_row(name)
     print('Your details are recorded \n')
 
 def edit_records():
@@ -103,11 +103,20 @@ def check_dates():
     Use todays date - 6 months and delete records before this time
     """
     print(date_col)
+
+    dates_list = [datetime.strptime(date, '%d/%m/%Y %H:%M:%S') for date in date_col[1:]]
+
     today= datetime.today()
     print(today)
 
     data_less_6_months = today - relativedelta(months=6)
     print(data_less_6_months)
+
+    for dates in dates_list:
+        if dates <= data_less_6_months:
+            print(dates)
+        else:
+            edit_records()
     
 
 def kids_below_6():
