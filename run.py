@@ -1,4 +1,5 @@
-from datetime import date 
+from datetime import datetime 
+from dateutil.relativedelta import relativedelta
 import time
 import gspread
 from google.oauth2.service_account import Credentials
@@ -17,13 +18,14 @@ SHEET = GSPREAD_CLIENT.open('adoption_form_responses')
 logins = SHEET.worksheet('logins')
 response= SHEET.worksheet('response')
 date_col= response.col_values(1)
+kids = response.col_values(4)
 
 def get_user():
     """
     Initial prompt to run username input and check that only string between 2 and 15 letters returned
     """
-    print('Enter your name')
-    print('Name must be between 2 and 15 letters long, with no numbers or special characters!')
+    print('Enter your name \n')
+    print('Name must be between 2 and 15 letters long, with no numbers or special characters! \n')
     print('Example: Laura \n')
 
     while(True):
@@ -52,13 +54,13 @@ def logon_check(name):
 
     for data in (data):
         if name == data:
-            print (f'You have an account. Welcome back {name}')
-            # run function to change records
+            print (f'You have an account. Welcome back {name} \n')
+            edit_records()
         elif name != data:
             permission= input('New user! Do you have permission to access records? y/n: \n')
             if permission== 'y':
-            # run function to change records
-                logon_check(name)
+                add_user(name)
+                edit_records()
             elif permission == 'n':
                 print ('You do not have access \n')
                 get_user()
@@ -67,7 +69,54 @@ def logon_check(name):
                 logon_check(name)
         break;
 
-# function to change records by date- import date info- delete 6 months
-# function to highlight incorrect applications on sheet??
+def add_user(name):
+    """
+    Adds username to login spreadsheet- API error!!!!
+    """
+    print('Adding user details...\n')
+    logins.append_row(name)
+    print('Your details are recorded \n')
+
+def edit_records():
+    """
+    Allows the user to select what they wish to modify
+    """
+    print('This page allows you to navigate our record management area \n')
+    print('Select "d" to navigate to entry date management')
+    print('Select "k" to navigate to highlight issues with applications')
+    print('Select "f" to end session')
+
+    records = input('Please select d/k: \n')
+    if records == 'd':
+        check_dates()
+    elif records == 'k':
+        kids_below_6()
+    elif records == 'f':
+        get_user()
+    else:
+        print ('INVALID INPUT!')
+        edit_records()
+
+
+def check_dates():
+    """
+    Use todays date - 6 months and delete records before this time
+    """
+    print(date_col)
+    today= datetime.today()
+    print(today)
+
+    data_less_6_months = today - relativedelta(months=6)
+    print(data_less_6_months)
+    
+
+def kids_below_6():
+    # function to highlight incorrect applications on sheet??
+    for kid in (kids):
+        if kid == 'Yes':
+            response.delete_row(index)
+            return kid
+        else:
+            edit_records()
 
 get_user()
