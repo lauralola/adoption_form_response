@@ -41,7 +41,7 @@ def get_user():
             get_user()
         else:
             logon_check(name)
-        break;
+        break
 
 def logon_check(name):
     """
@@ -67,14 +67,14 @@ def logon_check(name):
             else:
                 print ('INVALID INPUT!')
                 logon_check(name)
-        break;
+        break
 
 def add_user(name):
     """
     Adds username to login spreadsheet- API error!!!!
     """
     print('Adding user details...\n')
-    SHEET.worksheet('logins').append_row(name)
+    logins.append_row([name])
     print('Your details are recorded \n')
 
 def edit_records():
@@ -86,13 +86,13 @@ def edit_records():
     print('Select "k" to navigate to highlight issues with applications')
     print('Select "f" to end session')
 
-    records = input('Please select d/k: \n')
+    records = input('Please select d/k/f: \n')
     if records == 'd':
         check_dates()
     elif records == 'k':
         kids_below_6()
     elif records == 'f':
-        get_user()
+        exit()
     else:
         print ('INVALID INPUT!')
         edit_records()
@@ -102,19 +102,22 @@ def check_dates():
     """
     Use todays date - 6 months and delete records before this time
     """
-    print(date_col)
-
     dates_list = [datetime.strptime(date, '%d/%m/%Y %H:%M:%S') for date in date_col[1:]]
 
     today= datetime.today()
-    print(today)
 
-    data_less_6_months = today - relativedelta(months=6)
-    print(data_less_6_months)
+    date_less_6_months = today - relativedelta(months=6)
 
-    for dates in dates_list:
-        if dates <= data_less_6_months:
-            print(dates)
+    old_data=[]
+    for date in dates_list:
+        if date <= date_less_6_months:
+            old_data.append(date)
+            to_delete = len(old_data)
+            print (f'There are {to_delete} files which should be deleted.')
+            print ('Deleting..')
+            response.delete_rows(old_data)
+            print ('Data up to date')
+            edit_records()
         else:
             edit_records()
     
