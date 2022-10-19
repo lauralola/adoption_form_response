@@ -135,17 +135,17 @@ def delete(to_delete, old_data):
         print(f'These are at index {date_index}. Please add two to these to access the correct row')
         print('Please enter rows you wish to delete. You may not delete row 1. No letters or characters!')
 
-        a= input('Which rows do you wish to delete?')
+        a = input('Which rows do you wish to delete?')
+        
         if a == 1:
             print("Invalid entry! You may not select row 1 \n")
             delete(to_delete, old_data)
-        elif type(a) != int:
-            # this is triggering when number entered!! FIX
+        elif not a.isdigit():
             print("You must enter a number! \n")
             delete(to_delete, old_data)
         else:
-            response.delete_rows(a)
             print ('Deleting..')
+            response.delete_rows(a)
             data_remaining= len(dates_list)
             print (f'Data up to date. There are {data_remaining} applications on the system \n')
             edit_records()
