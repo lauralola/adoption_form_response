@@ -4,6 +4,7 @@ import time
 import gspread
 from google.oauth2.service_account import Credentials
 
+
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
@@ -19,6 +20,7 @@ logins = SHEET.worksheet('logins')
 response= SHEET.worksheet('response')
 date_col= response.col_values(1)
 kids = response.col_values(4)
+dates_list = [datetime.strptime(date, '%m/%d/%Y %H:%M:%S') for date in date_col[1:]]
 
 def get_user():
     """
@@ -50,13 +52,10 @@ def logon_check(name):
     If yes- add user to sheet as record 
     If no- brings back to initial page
     """
-    data= logins.col_values(1)
+    data = logins.col_values(1)
 
     for data in (data):
-        if name == data:
-            print (f'You have an account. Welcome back {name} \n')
-            edit_records()
-        elif name != data:
+        if name != data:
             permission= input('New user! Do you have permission to access records? y/n: \n')
             if permission== 'y':
                 add_user(name)
@@ -67,11 +66,14 @@ def logon_check(name):
             else:
                 print ('INVALID INPUT!')
                 logon_check(name)
+        elif name == data:
+            print (f'You have an account. Welcome back {name} \n')
+            edit_records()
         break
 
 def add_user(name):
     """
-    Adds username to login spreadsheet- API error!!!!
+    Adds username to login spreadsheet
     """
     print('Adding user details...\n')
     logins.append_row([name])
@@ -82,12 +84,18 @@ def edit_records():
     Allows the user to select what they wish to modify
     """
     print('This page allows you to navigate our record management area \n')
+    print('Select "a" to see how many applications are on the system')
     print('Select "d" to navigate to entry date management')
     print('Select "k" to navigate to highlight issues with applications')
     print('Select "f" to end session')
 
-    records = input('Please select d/k/f: \n')
-    if records == 'd':
+    records = input('Please select a/d/k/f: \n')
+    data_remaining= len(dates_list)
+
+    if records == 'a':
+        print(f'There are {data_remaining} applications on the system \n')
+        edit_records()
+    elif records == 'd':
         check_dates()
     elif records == 'k':
         kids_below_6()
@@ -102,33 +110,60 @@ def check_dates():
     """
     Use todays date - 6 months and delete records before this time
     """
-    dates_list = [datetime.strptime(date, '%d/%m/%Y %H:%M:%S') for date in date_col[1:]]
-
     today= datetime.today()
-
     date_less_6_months = today - relativedelta(months=6)
 
     old_data=[]
     for date in dates_list:
         if date <= date_less_6_months:
             old_data.append(date)
-            to_delete = len(old_data)
-            print (f'There are {to_delete} files which should be deleted.')
-            print ('Deleting..')
-            response.delete_rows(old_data)
-            print ('Data up to date')
-            edit_records()
+            print(old_data)
+    to_delete = len(old_data)
+    delete(to_delete, old_data)
+
+def delete(to_delete, old_data):
+
+    if to_delete == 0:
+        print('You are up to date. All records are under 6 months old')
+        edit_records()
+    else:
+        both = set(dates_list).intersection(old_data)
+        date_index =[dates_list.index(x) for x in both] 
+        # needs +2 added for title and not 0 index
+
+        print (f'There are {to_delete} files which are over 6 months old and should be deleted.')
+        print(f'These are at index {date_index}. Please add two to these to access the correct row')
+        print('Please enter rows you wish to delete. You may not delete row 1. No letters or characters!')
+
+        a= input('Which rows do you wish to delete?')
+        if a == 1:
+            print("Invalid entry! You may not select row 1 \n")
+            delete(to_delete, old_data)
+        elif type(a) != int:
+            # this is triggering when number entered!! FIX
+            print("You must enter a number! \n")
+            delete(to_delete, old_data)
         else:
+            response.delete_rows(a)
+            print ('Deleting..')
+            data_remaining= len(dates_list)
+            print (f'Data up to date. There are {data_remaining} applications on the system \n')
             edit_records()
     
-
 def kids_below_6():
     # function to highlight incorrect applications on sheet??
-    for kid in (kids):
-        if kid == 'Yes':
-            response.delete_row(index)
-            return kid
-        else:
-            edit_records()
+    # for kid in (kids):
+    yes= 'Yes'
+    kid_index =[]
+    i=0
+    length = len(kids)
+
+    while i< length:
+        if yes == kids[i]:
+            kid_index.append(i+1)
+        i +=1
+    
+    print(f'Applicants have said yes to kids under 6 at index {kid_index}')
+    print('These applicants are not suitable for adoptions')
 
 get_user()
