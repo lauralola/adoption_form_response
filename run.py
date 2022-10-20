@@ -52,10 +52,14 @@ def logon_check(name):
     If yes- add user to sheet as record 
     If no- brings back to initial page
     """
+    # not working correctly! Only checking first value
     data = logins.col_values(1)
 
-    for data in (data):
-        if name != data:
+    for row in (data):
+        if name in data:
+            print (f'You have an account. Welcome back {name} \n')
+            edit_records()
+        elif name not in data:
             permission= input('New user! Do you have permission to access records? y/n: \n')
             if permission== 'y':
                 add_user(name)
@@ -66,9 +70,6 @@ def logon_check(name):
             else:
                 print ('INVALID INPUT!')
                 logon_check(name)
-        elif name == data:
-            print (f'You have an account. Welcome back {name} \n')
-            edit_records()
         break
 
 def add_user(name):
@@ -117,42 +118,47 @@ def check_dates():
     for date in dates_list:
         if date <= date_less_6_months:
             old_data.append(date)
-            print(old_data)
     to_delete = len(old_data)
     delete(to_delete, old_data)
 
 def delete(to_delete, old_data):
+    """
+    User can use this to find which applications are older than 6 months and delete these
+    """
 
     if to_delete == 0:
         print('You are up to date. All records are under 6 months old')
         edit_records()
     else:
-        both = set(dates_list).intersection(old_data)
-        date_index =[dates_list.index(x) for x in both] 
-        # needs +2 added for title and not 0 index
+        date_index = [(dates_list.index(i)+2) for i in old_data if i in dates_list]
 
         print (f'There are {to_delete} files which are over 6 months old and should be deleted.')
-        print(f'These are at index {date_index}. Please add two to these to access the correct row')
+        print(f'These are at index {date_index}')
         print('Please enter rows you wish to delete. You may not delete row 1. No letters or characters!')
 
-        a = input('Which rows do you wish to delete?')
-        
-        if a == 1:
-            print("Invalid entry! You may not select row 1 \n")
-            delete(to_delete, old_data)
-        elif not a.isdigit():
-            print("You must enter a number! \n")
-            delete(to_delete, old_data)
-        else:
-            print ('Deleting..')
-            response.delete_rows(a)
-            data_remaining= len(dates_list)
-            print (f'Data up to date. There are {data_remaining} applications on the system \n')
-            edit_records()
-    
+        while True:
+            try:
+                a = input('Which rows do you wish to delete?')
+                if a.isdigit():
+                    a=int(a)
+                else:   
+                    raise ValueError()
+                if 2 <= a <= 400:
+                    print ('Deleting..')
+                    response.delete_rows(a)
+                    data_remaining= len(dates_list)
+                    print (f'Data up to date. There are {data_remaining} applications on the system \n')
+                    edit_records()
+                raise ValueError()
+            except ValueError:
+                print('Please enter an integer between 2 and 400.')
+
+
 def kids_below_6():
-    # function to highlight incorrect applications on sheet??
-    # for kid in (kids):
+    """
+    function to highlight incorrect applications on sheet
+    """
+
     yes= 'Yes'
     kid_index =[]
     i=0
@@ -164,6 +170,8 @@ def kids_below_6():
         i +=1
     
     print(f'Applicants have said yes to kids under 6 at index {kid_index}')
-    print('These applicants are not suitable for adoptions')
+    print('These applicants are not suitable for adoptions \n')
+
+    edit_records()
 
 get_user()
