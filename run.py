@@ -95,7 +95,6 @@ def edit_records():
 
     if records == 'a':
         print(f'There are {data_remaining} applications on the system \n')
-        edit_records()
     elif records == 'd':
         check_dates()
     elif records == 'k':
@@ -126,6 +125,8 @@ def delete(to_delete, old_data):
     User can use this to find which applications are older than 6 months and delete these
     """
 
+    # can only delete one at a time- records not updating, what if you don't want to delete
+
     if to_delete == 0:
         print('You are up to date. All records are under 6 months old')
         edit_records()
@@ -134,25 +135,32 @@ def delete(to_delete, old_data):
 
         print (f'There are {to_delete} files which are over 6 months old and should be deleted.')
         print(f'These are at index {date_index}')
-        print('Please enter rows you wish to delete. You may not delete row 1. No letters or characters!')
+        user_delete= input('Do you wish to delete files:y/n \n')
+        if user_delete == 'y':
+                print('Please enter rows you wish to delete. You may not delete row 1. No letters or characters!')
+                while True:
+                    try:
+                        a = input('Which row do you wish to delete? \n')
+                        if a.isdigit():
+                            a=int(a)
+                        else:   
+                            raise ValueError()
+                        if 2 <= a <= 400:
+                            print ('Deleting..')
+                            response.delete_rows(a)
+                            data_remaining= len(dates_list)
+                            print (f'Data up to date. There are {data_remaining} applications on the system \n')
+                            delete(to_delete, old_data)
+                        raise ValueError()
+                    except ValueError:
+                        print('Please enter an integer between 2 and 400.')
 
-        while True:
-            try:
-                a = input('Which rows do you wish to delete? \n')
-                if a.isdigit():
-                    a=int(a)
-                else:   
-                    raise ValueError()
-                if 2 <= a <= 400:
-                    print ('Deleting..')
-                    response.delete_rows(a)
-                    data_remaining= len(dates_list)
-                    print (f'Data up to date. There are {data_remaining} applications on the system \n')
-                    edit_records()
-                raise ValueError()
-            except ValueError:
-                print('Please enter an integer between 2 and 400.')
-
+        elif user_delete == 'n':
+                print ('Logging out \n')
+                get_user()
+        else:
+            print ('INVALID INPUT!')
+            delete()
 
 def kids_below_6():
     """
