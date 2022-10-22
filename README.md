@@ -23,3 +23,4 @@ Date issues tried:
 
 https://stackoverflow.com/questions/51171314/find-indexes-of-common-items-in-two-python-lists
 https://stackoverflow.com/questions/60825828/how-to-delete-column-by-user-input-in-excel-in-python-using-openpyxl
+https://stackoverflow.com/questions/52696172/limiting-an-input-between-two-numbers-and-checking-if-the-input-is-a-number-or-n#:~:text=You%20can%20use%20a%20while,%22)

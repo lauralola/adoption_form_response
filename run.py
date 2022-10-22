@@ -31,7 +31,7 @@ def get_user():
     print('Example: Laura \n')
 
     while(True):
-        name = input('Enter your name here: ')
+        name = input('Enter your name here: \n')
         if len(name) > 15:
             print("Invalid entry! Your name can only be up to 15 letters \n")
             get_user()
@@ -138,7 +138,7 @@ def delete(to_delete, old_data):
 
         while True:
             try:
-                a = input('Which rows do you wish to delete?')
+                a = input('Which rows do you wish to delete? \n')
                 if a.isdigit():
                     a=int(a)
                 else:   
