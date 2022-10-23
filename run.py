@@ -136,31 +136,72 @@ def delete(to_delete, old_data):
         print (f'There are {to_delete} files which are over 6 months old and should be deleted.')
         print(f'These are at index {date_index}')
         user_delete= input('Do you wish to delete files:y/n \n')
-        if user_delete == 'y':
+        if user_delete == 'n':
+            print ('Logging out \n')
+            get_user()
+        elif user_delete == 'y':
+            while True:
                 print('Please enter rows you wish to delete. You may not delete row 1. No letters or characters!')
-                while True:
-                    try:
-                        a = input('Which row do you wish to delete? \n')
-                        if a.isdigit():
-                            a=int(a)
-                        else:   
-                            raise ValueError()
-                        if 2 <= a <= 400:
-                            print ('Deleting..')
-                            response.delete_rows(a)
-                            data_remaining= len(dates_list)
-                            print (f'Data up to date. There are {data_remaining} applications on the system \n')
-                            delete(to_delete, old_data)
-                        raise ValueError()
-                    except ValueError:
-                        print('Please enter an integer between 2 and 400.')
-
-        elif user_delete == 'n':
-                print ('Logging out \n')
-                get_user()
+                print('Please enter separated by commas')
+                print('Example: 2,4,6,9')
+                delete_row = input('Which row do you wish to delete?')
+                a = delete_row.split(",")
+                if validate_data(a):
+                    print("Data is valid!")
+                    print ('Deleting..')
+                    response.delete_rows([a])
+                    data_remaining= len(dates_list)
+                    print (f'Data up to date. There are {data_remaining} applications on the system \n')
+                    delete(to_delete, old_data)
+                else:
+                    delete(to_delete, old_data)
+                break
         else:
             print ('INVALID INPUT!')
-            delete()
+            delete(to_delete, old_data)
+
+def validate_data(values):
+    """
+    Inside the try, converts all string values into integers.
+    Raises ValueError if strings cannot be converted into int,
+    or if there aren't exactly 6 values.
+    """
+    try:
+        [int(value) for value in values]
+        for value in values:
+            if 2 >= value >= 400:
+                raise ValueError(f"Rows must be between 2 and 400, you provided {values}")
+    except ValueError:
+        print(f"Invalid data: please try again.\n")
+        return False
+
+    return True
+
+                    #     [int(elem) for elem in a]
+                    #     for elem in a:
+                    #         if '2' <= elem <= '400':
+                    #             print ('Deleting..')
+                    #             response.delete_rows(a)
+                    #             data_remaining= len(dates_list)
+                    #             print (f'Data up to date. There are {data_remaining} applications on the system \n')
+                    #             delete(to_delete, old_data)
+                    #     raise ValueError()
+
+                    #     # if a.isdigit():
+                    #     #     a=int(a)
+                    #     # else:   
+                    #     #     raise ValueError()
+                    #     # if 2 <= a <= 400:
+                    #     #     print ('Deleting..')
+                    #     #     response.delete_rows(a)
+                    #     #     data_remaining= len(dates_list)
+                    #     #     print (f'Data up to date. There are {data_remaining} applications on the system \n')
+                    #     #     delete(to_delete, old_data)
+                    #     # raise ValueError()
+                    # except ValueError:
+                    #     print('Please enter an integer between 2 and 400.')
+
+
 
 def kids_below_6():
     """
