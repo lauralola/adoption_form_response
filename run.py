@@ -95,6 +95,7 @@ def edit_records():
 
     if records == 'a':
         print(f'There are {data_remaining} applications on the system \n')
+        edit_records()
     elif records == 'd':
         check_dates()
     elif records == 'k':
@@ -141,41 +142,55 @@ def delete(to_delete, old_data):
             get_user()
         elif user_delete == 'y':
             while True:
-                print('Please enter rows you wish to delete. You may not delete row 1. No letters or characters!')
-                print('Please enter separated by commas')
-                print('Example: 2,4,6,9')
-                delete_row = input('Which row do you wish to delete?')
-                a = delete_row.split(",")
-                if validate_data(a):
-                    print("Data is valid!")
-                    print ('Deleting..')
-                    response.delete_rows([a])
-                    data_remaining= len(dates_list)
-                    print (f'Data up to date. There are {data_remaining} applications on the system \n')
-                    delete(to_delete, old_data)
-                else:
-                    delete(to_delete, old_data)
-                break
-        else:
-            print ('INVALID INPUT!')
-            delete(to_delete, old_data)
+                try:
+                    print('Please enter row you wish to delete. You may not delete row 1. No letters or characters!')
+                # print('Please enter separated by commas')
+                # print('Example: 2,4,6,9')
+                    delete_row = input('Which row do you wish to delete?')
+                    if delete_row.isdigit():
+                        delete_row=int(delete_row)
+                    else:   
+                        raise ValueError()
+                    if 2 <= delete_row <= 400:
+                        print ('Deleting..')
+                        response.delete_rows(delete_row)
+                        data_remaining1= (len(dates_list) -1)
+                        print (f'Data up to date. There are {data_remaining1} applications on the system \n')
+                        edit_records()
+                    raise ValueError()
+                except ValueError:
+                    print('Please enter an integer between 2 and 400.')
+#                 a = delete_row.split(",")
+#                 if validate_data(a):
+#                     print("Data is valid!")
+#                     print ('Deleting..')
+#                     response.delete_rows([a])
+#                     data_remaining= len(dates_list)
+#                     print (f'Data up to date. There are {data_remaining} applications on the system \n')
+#                     delete(to_delete, old_data)
+#                 else:
+#                     delete(to_delete, old_data)
+#                 break
+#         else:
+#             print ('INVALID INPUT!')
+#             delete(to_delete, old_data)
 
-def validate_data(values):
-    """
-    Inside the try, converts all string values into integers.
-    Raises ValueError if strings cannot be converted into int,
-    or if there aren't exactly 6 values.
-    """
-    try:
-        [int(value) for value in values]
-        for value in values:
-            if 2 >= value >= 400:
-                raise ValueError(f"Rows must be between 2 and 400, you provided {values}")
-    except ValueError:
-        print(f"Invalid data: please try again.\n")
-        return False
+# def validate_data(values):
+#     """
+#     Inside the try, converts all string values into integers.
+#     Raises ValueError if strings cannot be converted into int,
+#     or if not between 2 and 400.
+#     """
+#     try:
+#         # [int(value) for value in values]
+#         for value in values:
+#             if 2 >= int(value) or int(value) >= 400:
+#                 raise ValueError
+#     except ValueError:
+#         print(f"Invalid data: You must enter an integer between 2 and 400! Please try again.\n")
+#         return False
 
-    return True
+#     return True
 
                     #     [int(elem) for elem in a]
                     #     for elem in a:
