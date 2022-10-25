@@ -156,10 +156,13 @@ def delete(to_delete, old_data):
                         response.delete_rows(delete_row)
                         data_remaining1= (len(dates_list) -1)
                         print (f'Data up to date. There are {data_remaining1} applications on the system \n')
-                        edit_records()
+                        exit()
                     raise ValueError()
                 except ValueError:
-                    print('Please enter an integer between 2 and 400.')
+                    print('\n Please enter an integer between 2 and 400.')
+        else:
+            print ('INVALID INPUT!')
+            delete(to_delete, old_data)
 #                 a = delete_row.split(",")
 #                 if validate_data(a):
 #                     print("Data is valid!")

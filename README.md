@@ -26,7 +26,9 @@ The purpose of this project is to provide a simple, easy way for users to intera
 
 ## Design
 
-The overall design was intended to simple and easy to use without too many distractions. Upon opening the page, the overall design of the page should assist in the user quickly becoming aware of the premise of the game.
+The google form is designed to collect basic data from potential adopters and colate this into a google sheet. The program is designed to manipulate the data in this sheet to make rehoming of dogs more steamline. 
+
+Upon running the program, the user is prompted for a username. This is to ensure security of the program as contact
 
 Tha background and colour scheme was chosen to give the feeling and ambiance of a card table in a casino with black, red and silver being the primary chosen colours and an image of a man dealing cards. The font again was chosen to invoke that feeling of the Wild West and old time card saloons and is large enough in size to be legible to users.  A fall-back font of Sans-Serif should the browser be unable to access the google fonts was used. One font was used to ensure consistency. 
 
@@ -204,3 +206,5 @@ Date issues tried:
 https://stackoverflow.com/questions/51171314/find-indexes-of-common-items-in-two-python-lists
 https://stackoverflow.com/questions/60825828/how-to-delete-column-by-user-input-in-excel-in-python-using-openpyxl
 https://stackoverflow.com/questions/52696172/limiting-an-input-between-two-numbers-and-checking-if-the-input-is-a-number-or-n#:~:text=You%20can%20use%20a%20while,%22)
+
+after delete row- does not update the data from spreadsheet- still shows deleted row fixed with exit()
