@@ -208,3 +208,5 @@ https://stackoverflow.com/questions/60825828/how-to-delete-column-by-user-input-
 https://stackoverflow.com/questions/52696172/limiting-an-input-between-two-numbers-and-checking-if-the-input-is-a-number-or-n#:~:text=You%20can%20use%20a%20while,%22)
 
 after delete row- does not update the data from spreadsheet- still shows deleted row fixed with exit()
+https://pypi.org/project/colored/
+

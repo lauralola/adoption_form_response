@@ -3,7 +3,10 @@ from dateutil.relativedelta import relativedelta
 import time
 import gspread
 from google.oauth2.service_account import Credentials
+import colorama
+from colorama import Fore, Back, Style
 
+colorama.init(autoreset=True)
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -26,20 +29,20 @@ def get_user():
     """
     Initial prompt to run username input and check that only string between 2 and 15 letters returned
     """
-    print('Enter your name \n')
-    print('Name must be between 2 and 15 letters long, with no numbers or special characters! \n')
-    print('Example: Laura \n')
+    print(Back.MAGENTA + 'Enter your name \n')
+    print(Back.CYAN +'Name must be between 2 and 15 letters long, with no numbers or special characters! \n')
+    print(Back.MAGENTA + 'Example: Laura \n')
 
     while(True):
-        name = input('Enter your name here: \n')
+        name = input(Fore.CYAN + 'Enter your name here: \n')
         if len(name) > 15:
-            print("Invalid entry! Your name can only be up to 15 letters \n")
+            print(Back.RED"Invalid entry! Your name can only be up to 15 letters \n")
             get_user()
         elif len(name) <2:
-            print("Invalid entry! Your name must be more than 2 letters \n")
+            print(Back.RED"Invalid entry! Your name must be more than 2 letters \n")
             get_user()
         elif str.isalpha(name)!= True:
-            print("Invalid entry! Your name must only contain letters\n")
+            print(Back.RED"Invalid entry! Your name must only contain letters\n")
             get_user()
         else:
             logon_check(name)
@@ -101,7 +104,7 @@ def edit_records():
     elif records == 'k':
         kids_below_6()
     elif records == 'f':
-        exit()
+        get_user()()
     else:
         print ('INVALID INPUT!')
         edit_records()
@@ -138,8 +141,7 @@ def delete(to_delete, old_data):
         print(f'These are at index {date_index}')
         user_delete= input('Do you wish to delete files:y/n \n')
         if user_delete == 'n':
-            print ('Logging out \n')
-            get_user()
+            edit_records()
         elif user_delete == 'y':
             while True:
                 try:
@@ -163,64 +165,7 @@ def delete(to_delete, old_data):
         else:
             print ('INVALID INPUT!')
             delete(to_delete, old_data)
-#                 a = delete_row.split(",")
-#                 if validate_data(a):
-#                     print("Data is valid!")
-#                     print ('Deleting..')
-#                     response.delete_rows([a])
-#                     data_remaining= len(dates_list)
-#                     print (f'Data up to date. There are {data_remaining} applications on the system \n')
-#                     delete(to_delete, old_data)
-#                 else:
-#                     delete(to_delete, old_data)
-#                 break
-#         else:
-#             print ('INVALID INPUT!')
-#             delete(to_delete, old_data)
-
-# def validate_data(values):
-#     """
-#     Inside the try, converts all string values into integers.
-#     Raises ValueError if strings cannot be converted into int,
-#     or if not between 2 and 400.
-#     """
-#     try:
-#         # [int(value) for value in values]
-#         for value in values:
-#             if 2 >= int(value) or int(value) >= 400:
-#                 raise ValueError
-#     except ValueError:
-#         print(f"Invalid data: You must enter an integer between 2 and 400! Please try again.\n")
-#         return False
-
-#     return True
-
-                    #     [int(elem) for elem in a]
-                    #     for elem in a:
-                    #         if '2' <= elem <= '400':
-                    #             print ('Deleting..')
-                    #             response.delete_rows(a)
-                    #             data_remaining= len(dates_list)
-                    #             print (f'Data up to date. There are {data_remaining} applications on the system \n')
-                    #             delete(to_delete, old_data)
-                    #     raise ValueError()
-
-                    #     # if a.isdigit():
-                    #     #     a=int(a)
-                    #     # else:   
-                    #     #     raise ValueError()
-                    #     # if 2 <= a <= 400:
-                    #     #     print ('Deleting..')
-                    #     #     response.delete_rows(a)
-                    #     #     data_remaining= len(dates_list)
-                    #     #     print (f'Data up to date. There are {data_remaining} applications on the system \n')
-                    #     #     delete(to_delete, old_data)
-                    #     # raise ValueError()
-                    # except ValueError:
-                    #     print('Please enter an integer between 2 and 400.')
-
-
-
+#                 
 def kids_below_6():
     """
     function to highlight incorrect applications on sheet
