@@ -85,13 +85,13 @@ Additional features could be to build out to include a more robust login method 
 
 ## Testing
 
-I tested my code using [Python Checker] (https://www.pythonchecker.com/). No errors were given. 
+I tested my code using [Python Checker](https://www.pythonchecker.com/). No errors were given. 
 
 I performed several manual tests on all aspects of the program where user input is required. 
 
 On the initial screen a username must be input. This must be between 2 and 15 letters with no other characters. To test this I entered a single letter, combined letters over 15 characters, letters and numbers, single numbers, letters and characters, single characters to ensure that errors were given in all instances. Error messages were given in all instaces and this appears to be functioning well. 
 
-New users are asked if they have permission to access records. This is a simple y/n. Any other input should throw an error back to the user. This again was tested with a wide varity of letters, numbers and characters and appears to be functioning well. Y should bring the user to the menu page and n should return to login page and all appears to be functioning. 
+New users are asked if they have permission to access records. This is a simple y/n. Any other input should throw an error back to the user. This again was tested with a wide varity of letters, numbers and characters and appears to be functioning well. "y" should bring the user to the menu page and "n" should return to login page and all appears to be functioning. 
 
 From the menu page only 4 options are given for input a/d/k/f. Again this was tested with multiple different combinations and all functioning. The respective letters lead to different areas of the program and this was seen on testing. 
 
@@ -101,9 +101,13 @@ Within the entry date management area there again is a y/n input question which 
 
 ## Bugs
 
-issue with login check name-only checking first one- adding duplicates to file-?why
-adding name to spreadsheet- was expecting list[]
-formatting the time correctly for comparison
+There was initially an issue with the login name to check the sheet to see if a new or existing user. The code was only checking the first element of the column so existing users lower in the column were being treated as new users. This was due to repitition in the loop being set up as 'for data in data', once changed to 'for row in data' it functioned correctly. 
+
+There was also initially an issue with adding the new users to the list. This was due to the program expecting a list input. Originally written as 'logins.append_row(name)' once changed to logins.append_row([name]) this was rectified and functioning. 
+
+Another issue was formatting the time from the sheet correctly to compare with todays date and time. This was resolved by removing the time and having it stored as month/day/year [datetime.strptime(date, '%m/%d/%Y %H:%M:%S') for date in date_col[1:]]
+
+
 separateing delete function from check date function as was repeating with each iteration
 Adding 1 to index as not 0 indexed
 Not recognising interger for input??

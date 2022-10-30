@@ -21,13 +21,10 @@ SHEET = GSPREAD_CLIENT.open('adoption_form_responses')
 
 logins = SHEET.worksheet('logins')
 response= SHEET.worksheet('response')
-date_col= response.col_values(1)
-kids = response.col_values(4)
-dates_list = [datetime.strptime(date, '%m/%d/%Y %H:%M:%S') for date in date_col[1:]]
 
 def get_user():
     """
-    Initial prompt to run username input and check that only string between 2 and 15 letters returned
+    Initial prompt to run username input and check that only input is a string between 2 and 15 letters
     """
     print(Fore.MAGENTA + 'Enter your name')
     print(Fore.MAGENTA +'Name must be between 2 and 15 letters long, with no numbers or special characters!')
@@ -55,7 +52,6 @@ def logon_check(name):
     If yes- add user to sheet as record 
     If no- brings back to initial page
     """
-    # not working correctly! Only checking first value
     data = logins.col_values(1)
 
     for row in (data):
@@ -77,7 +73,7 @@ def logon_check(name):
 
 def add_user(name):
     """
-    Adds username to login spreadsheet
+    Adds new usernames to login spreadsheet
     """
     print('Adding user details...\n')
     logins.append_row([name])
@@ -85,7 +81,9 @@ def add_user(name):
 
 def edit_records():
     """
-    Allows the user to select what they wish to modify
+    Allows the user to select what they wish to modify. Input is limited to 4 letters
+    These 4 letters bring the user to different functions
+    If anything else is inputted an error is thrown back to user
     """
     print('This page allows you to navigate our record management area \n')
     print(Fore.BLUE +'Select "a" to see how many applications are on the system')
@@ -94,11 +92,8 @@ def edit_records():
     print(Fore.MAGENTA +'Select "f" to end session')
 
     records = input('Please select a/d/k/f: \n')
-    data_remaining= len(dates_list)
-
     if records == 'a':
-        print(f'There are {data_remaining} applications on the system \n')
-        edit_records()
+        applications()
     elif records == 'd':
         check_dates()
     elif records == 'k':
@@ -106,14 +101,26 @@ def edit_records():
     elif records == 'f':
         quit()
     else:
-        print (Back.RED + 'INVALID INPUT!')
+        print (Back.RED + 'INVALID INPUT! Please only enter a/d/k/f')
         edit_records()
 
+def applications():
+    """
+    Function to return the total number of applications on sheet
+    Length of column -1 to allow for title of sheet
+    """
+    date_col= response.col_values(1)
+    data_remaining= len(date_col)-1
+    print(f'There are {data_remaining} applications on the system \n')
+    edit_records()
 
 def check_dates():
     """
-    Use todays date - 6 months and delete records before this time
+    Use todays date - 6 months to return list of data older than this and their row number in sheet
+    This is then used in the delete function
     """
+    date_col= response.col_values(1)
+    dates_list = [datetime.strptime(date, '%m/%d/%Y %H:%M:%S') for date in date_col[1:]]
     today= datetime.today()
     date_less_6_months = today - relativedelta(months=6)
 
@@ -122,12 +129,17 @@ def check_dates():
         if date <= date_less_6_months:
             old_data.append(date)
     to_delete = len(old_data)
-    delete(to_delete, old_data)
+    delete(to_delete, old_data, dates_list)
 
-def delete(to_delete, old_data):
+def delete(to_delete, old_data, dates_list):
     """
     User can use this to find which applications are older than 6 months and delete these
+    If no applications older than 6 months the user is informed of this and returned to menu
+    If older applications present the row number of these is returned and the user is asked if they wish to delete
+    If no- they are returned to menu
+    If yes a new function is called row_delete
     """
+    data_remaining= len(dates_list)
 
     if to_delete == 0:
         print('You are up to date. All records are under 6 months old')
@@ -135,38 +147,51 @@ def delete(to_delete, old_data):
     else:
         date_index = [(dates_list.index(i)+2) for i in old_data if i in dates_list]
 
+        print(f'There are {data_remaining} applications on the system \n')
         print (f'There are {to_delete} files which are over 6 months old and should be deleted.')
         print(f'These are at index {date_index}')
         user_delete= input('Do you wish to delete files:y/n \n')
         if user_delete == 'n':
             edit_records()
         elif user_delete == 'y':
-            while True:
-                try:
-                    print('Please enter row you wish to delete. You may not delete row 1. No letters or characters!')
-                    delete_row = input('Which row do you wish to delete?')
-                    if delete_row.isdigit():
-                        delete_row=int(delete_row)
-                    else:   
-                        raise ValueError()
-                    if 2 <= delete_row <= 400:
-                        print ('Deleting..')
-                        response.delete_rows(delete_row)
-                        data_remaining1= (len(dates_list)-1)
-                        print (f'Data up to date. There are {data_remaining1} applications on the system \n')
-                        exit()
-                    raise ValueError()
-                except ValueError:
-                    print('\n Please enter an integer between 2 and 400.')
+            row_delete(old_data, dates_list)
         else:
-            print ('INVALID INPUT!')
-            delete(to_delete, old_data)
-#                 
+            print ('INVALID INPUT! Please only enter y/n')
+            delete(to_delete, old_data, dates_list)
+
+def row_delete(old_data, dates_list):
+    """
+    This allows user to delete rows. 
+    They must enter just one integer between 2 and 70 otherwise error will occur.
+    They cannot delete row 1 as this is the headings of the sheet
+    They cannot delete over 70 at the moment as the sheet is not full.
+    This can be increased as data increases.
+    """
+    while True:
+        try:
+            print('Please enter row you wish to delete. You may not delete row 1. No letters or characters!')
+            delete_row = input('Which row do you wish to delete?')
+            if delete_row.isdigit():
+                delete_row=int(delete_row)
+            else:   
+                raise ValueError()
+            if 2 <= delete_row <= 70:
+                print ('Deleting..')
+                response.delete_rows(delete_row)
+                check_dates()
+                data_remaining1= [(dates_list.index(i)+2) for i in old_data if i in dates_list]
+                print (f'Data up to date. There are {data_remaining1} applications on the system \n')
+                delete(to_delete, old_data, dates_list)
+            raise ValueError()
+        except ValueError:
+            print('\n Please enter an integer between 2 and 70.')
+               
 def kids_below_6():
     """
-    function to highlight incorrect applications on sheet
+    Function to highlight applications on sheet that have kids under 6 years of age
+    It will return the row number of these applications which in further development could be highlighted or moved 
     """
-
+    kids = response.col_values(4)
     yes= 'Yes'
     kid_index =[]
     i=0
