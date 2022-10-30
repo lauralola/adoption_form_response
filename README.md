@@ -42,7 +42,7 @@ Tha colour scheme was chosen to make the text more easy to discern particularly 
  #### Existing Users
  Existing users should also be able to quickly and easily navigate the program to manage records and monitor applications. 
 
- ![Workflow](./images/flow.png)
+ ![Workflow](./images/flowchart.png)
 
 ## Features  
 #### Initial welcome screen and user-name input
@@ -54,7 +54,7 @@ The menu page contains 4 options. Again these require specified inputs and anyth
 
 The first item in the menu is to identify how many applications are on the system. This returns the number of applications on the system and returns you to the menu. 
 
-The second allows you to see entries over 6 months old and their index in the spreadsheet. You are then asked if you wish to delete files again with only a y/n answer. Any other input will throw an error. If you select no you are returned to the menu. If yes is selected the index/row you wish to delete should be entered. This must be an integer and cannot be row 1 as this contains the title to the spreadsheet columns. In order to access the correct rows, 2 is added to the index numbers to account for the title page and the fact that sheets start at 1 not 0. Once the row is deleted the program logs out. With increased security and recording methods multiple deletes could be possible but due to the scope of this project one delete was only allowed to a user. 
+The second allows you to see entries over 6 months old and their index in the spreadsheet. You are then asked if you wish to delete files again with only a y/n answer. Any other input will throw an error. If you select no you are returned to the menu. If yes is selected the index/row you wish to delete should be entered. This must be an integer and cannot be row 1 as this contains the title to the spreadsheet columns. In order to access the correct rows, 2 is added to the index numbers to account for the title page and the fact that sheets start at 1 not 0. Once the row is deleted the program returns the number of applications left and the row numbers of those older than 6 months and asks again if you would like to delete a row. With increased security and recording methods multiple deletes at one time could be possible but due to the scope of this project one delete was only allowed to a user. 
 
 The third option is to access applications with issues such as kids under 6. This gives the user return of the index of unsuitable applications due to young kids in the home. In future development these applications could be moved to another sheet or highlighted in the existing sheet to make management easier. 
 
@@ -95,7 +95,9 @@ New users are asked if they have permission to access records. This is a simple 
 
 From the menu page only 4 options are given for input a/d/k/f. Again this was tested with multiple different combinations and all functioning. The respective letters lead to different areas of the program and this was seen on testing. 
 
-Within the entry date management area there again is a y/n input question which was tested as above to ensure functionality. Another input asks then for an integer to delete a row. This must be an integer and this was tested as above with many different inputs to ensure only a single number can be entered. 
+Within the entry date management area there again is a y/n input question which was tested as above to ensure functionality. Another input asks then for an integer to delete a row. This must be an integer and this was tested as above with many different inputs to ensure only a single number can be entered. After a deletion occurs the program returns updated information on the number of applications remaining and the number of records over 6 months. This was tested to ensure accuracy by deleting rows with no records, deleting rows with old data and new data to ensure all returned data was accurate. 
+
+After each fucntion there is an option to finish session or return to menu and the user must input m for menu or f to end session. This was tested as above to ensure functionality. 
 
 [Back to top](#contents)
 
@@ -107,35 +109,11 @@ There was also initially an issue with adding the new users to the list. This wa
 
 Another issue was formatting the time from the sheet correctly to compare with todays date and time. This was resolved by removing the time and having it stored as month/day/year [datetime.strptime(date, '%m/%d/%Y %H:%M:%S') for date in date_col[1:]]
 
+On deploying the program to Heroku there was an issue with dateutil. Despite it being installed and on the requirements.txt file, Heroku was returning that the module was not found. With aid from tutor support this was rectified by installing a different version of dateutil. 
 
-separateing delete function from check date function as was repeating with each iteration
-Adding 1 to index as not 0 indexed
-Not recognising interger for input??
-adding row in data rather than data in data resolved name spreadsheet issue. 
+Initially the delete function contained the check_date function and the delete_row functions so to reduce errors and ensure accurate returned data after deletion these were split. This resolved issue. 
 
-Date issues tried:
-        # both = set(dates_list).intersection(old_data)
-        # date_index =[dates_list.index(i) for i in both] 
-        # needs +2 added for title and not 0 index, only returning 1 value!!
-
-
-        # date_index = []
-        # for i in old_data:
-        #     if i in dates_list:
-        #         for j in dates_list:
-        #             if i == j:
-        #                 if dates_list.index(i) not in date_index:
-        #                     date_index.append(dates_list.index(i)+2)
-
-
-https://stackoverflow.com/questions/51171314/find-indexes-of-common-items-in-two-python-lists
-https://stackoverflow.com/questions/60825828/how-to-delete-column-by-user-input-in-excel-in-python-using-openpyxl
-https://stackoverflow.com/questions/52696172/limiting-an-input-between-two-numbers-and-checking-if-the-input-is-a-number-or-n#:~:text=You%20can%20use%20a%20while,%22)
-
-after delete row- does not update the data from spreadsheet- still shows deleted row fixed with exit()
-https://pypi.org/project/colored/
-
-
+There is one unresolved bug which is unlikely to affect the program running. If rows date and time match exactly to the second, and if the row is over 6 months old, then the return of that row and matching rows in the row_delete function returns only the first row. For example if row 4 is copied and pasted into row 5 and 6, the return of the data over 6 months old will read [4,4,4] rather then [4,5,6]. This is unlikely to occur in reality as two applicants submitting the form at the exact same time to the second is unlikely. However this could be looked into in further development to resolve. 
 
 [Back to top](#contents)
 
@@ -151,7 +129,10 @@ The love sandwiches project was used as a guide for setting the Heroku page up a
 
 Some comments from tutoring were also used to rectify issues with dateutil on Heroku and with user input issues. 
 
+[This](https://stackoverflow.com/questions/51171314/find-indexes-of-common-items-in-two-python-lists) helped with some ideas for finding the old_data in the dates_list to find dates over 6 months old. 
+
+[This](https://stackoverflow.com/questions/52696172/limiting-an-input-between-two-numbers-and-checking-if-the-input-is-a-number-or-n#:~:text=You%20can%20use%20a%20while,%22) helped with resticting integer input to between two numbers for the row_delete function. 
+
 [Back to top](#contents)
 
 Laura Walsh 2022
-
