@@ -104,6 +104,23 @@ def edit_records():
         print (Back.RED + 'INVALID INPUT! Please only enter a/d/k/f')
         edit_records()
 
+def menu():
+    """
+    Allow user to navigate to menu or to end session. 
+    Must only enter m or f
+    """
+    print(Fore.CYAN +'Press "m" to return to menu')
+    print(Fore.MAGENTA +'Select "f" to end session')
+
+    home = input('Please select m/f: \n')
+    if home == 'm':
+        edit_records()
+    elif home == 'f':
+        quit()
+    else:
+        print (Back.RED + 'INVALID INPUT! Please only enter m/f')
+        menu()
+
 def applications():
     """
     Function to return the total number of applications on sheet
@@ -112,7 +129,7 @@ def applications():
     date_col= response.col_values(1)
     data_remaining= len(date_col)-1
     print(f'There are {data_remaining} applications on the system \n')
-    edit_records()
+    menu()
 
 def check_dates():
     """
@@ -143,7 +160,7 @@ def delete(to_delete, old_data, dates_list):
 
     if to_delete == 0:
         print('You are up to date. All records are under 6 months old')
-        edit_records()
+        menu()
     else:
         date_index = [(dates_list.index(i)+2) for i in old_data if i in dates_list]
 
@@ -152,11 +169,11 @@ def delete(to_delete, old_data, dates_list):
         print(f'These are at index {date_index}')
         user_delete= input('Do you wish to delete files:y/n \n')
         if user_delete == 'n':
-            edit_records()
+            menu()
         elif user_delete == 'y':
             row_delete(old_data, dates_list)
         else:
-            print ('INVALID INPUT! Please only enter y/n')
+            print (Back.RED + 'INVALID INPUT! Please only enter y/n')
             delete(to_delete, old_data, dates_list)
 
 def row_delete(old_data, dates_list):
@@ -164,7 +181,7 @@ def row_delete(old_data, dates_list):
     This allows user to delete rows. 
     They must enter just one integer between 2 and 70 otherwise error will occur.
     They cannot delete row 1 as this is the headings of the sheet
-    They cannot delete over 70 at the moment as the sheet is not full.
+    They cannot delete over 65 at the moment as the sheet is not full.
     This can be increased as data increases.
     """
     while True:
@@ -175,7 +192,7 @@ def row_delete(old_data, dates_list):
                 delete_row=int(delete_row)
             else:   
                 raise ValueError()
-            if 2 <= delete_row <= 70:
+            if 2 <= delete_row <= 65:
                 print ('Deleting..')
                 response.delete_rows(delete_row)
                 check_dates()
@@ -184,7 +201,7 @@ def row_delete(old_data, dates_list):
                 delete(to_delete, old_data, dates_list)
             raise ValueError()
         except ValueError:
-            print('\n Please enter an integer between 2 and 70.')
+            print(Back.RED + '\n Please enter an integer between 2 and 65.')
                
 def kids_below_6():
     """
@@ -204,7 +221,6 @@ def kids_below_6():
     
     print(f'Applicants have said yes to kids under 6 at index {kid_index}')
     print('These applicants are not suitable for adoptions \n')
-
-    edit_records()
+    menu()
 
 get_user()
