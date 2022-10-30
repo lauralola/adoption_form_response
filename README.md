@@ -2,7 +2,7 @@
 
 The purpose of this project is to provide a simple, easy way for users to interact with a spreadsheet containing data from a google form. I currently volunteer with an animal rescue using this method for our rehoming but currently all data is manually changed in the spreadsheet. With GDPR records must be deleted after 6 months and certain applicants are unsuitable for homing. The aim of this project was to trial a method of allowing users to perform these tasks with less effort. 
 
-[View the live project here]() 
+[View the live project here](https://adoption-form.herokuapp.com/) 
 
 ## Contents                             1       2
 
@@ -26,159 +26,80 @@ The purpose of this project is to provide a simple, easy way for users to intera
 
 ## Design
 
-The google form is designed to collect basic data from potential adopters and colate this into a google sheet. The program is designed to manipulate the data in this sheet to make rehoming of dogs more steamline. 
+The google form is designed to collect basic data from potential adopters and colate this into a google sheet. The google form is [available here](https://forms.gle/c2WoRFhvzqWEH8nC6).
 
-Upon running the program, the user is prompted for a username. This is to ensure security of the program as contact
+The program is designed to manipulate the data from the sheet collected from this form to make rehoming of dogs more steamline. Upon running the program, the user is prompted for a username. This is to ensure security of the program and all new users are recorded.
 
-Tha background and colour scheme was chosen to give the feeling and ambiance of a card table in a casino with black, red and silver being the primary chosen colours and an image of a man dealing cards. The font again was chosen to invoke that feeling of the Wild West and old time card saloons and is large enough in size to be legible to users.  A fall-back font of Sans-Serif should the browser be unable to access the google fonts was used. One font was used to ensure consistency. 
-
-Icons from font awesome were also utilised to add some extra focus for clients. 
-
-Upon opening the game an alert appears to explain the basic instructions for the game and how to play. This is short and concise so as to keep users engaged.
-
-![Website](./assets/images/readme-images/responsive.png)
+Tha colour scheme was chosen to make the text more easy to discern particularly in the menu which is text heavy and to highlight issues with a strong red background to the text. 
 
 [Back to top](#contents)
 
 ## User Experience
 
 #### First Time Users
- The goal for first time users is for the game to be easily understood. The user should from opening of the site be able to read the short instructions and be able to play the game. The design is simple in structure so as not to have too many elements to confuse a first time user.  
+ The goal for first time users is for the program to be easily understood. The user must confirm they have permission to access records and is informed that their name is saved. Any user entry issues are highlighted with a red background to make it clear where errors have been made. 
 
  #### Existing Users
- Existing users should also be able to quickly and easily navigate the game to keep them engaged and interested in the product. 
+ Existing users should also be able to quickly and easily navigate the program to manage records and monitor applications. 
+
+ ![Workflow](./images/flow.png)
 
 ## Features  
-  * Initial welcome screen and user-name input
-   * New user or already user
-   * Menu
-   * Applications on system
-   * Date management
-   * Applicants with young kids
-   * End session
-#### Initial Game Alert 
-The inital alert is deigned to easily explain how the game is played. It is designed to upon loading of the page pop up to assist the user and can then be closed to procede with the game. The aim of the game is to beat the computer. The sum total of the players cards should stay below 21 but as close to 21 as possible. 
+#### Initial welcome screen and user-name input
+The inital welcome asks for a username to be entered and describes the correct input needed for this. It must be between 2 and 15 letters with only letters used. If a user enters anything not conforming with this an alert is raised and they are asked to enter correct name. Once a name that conforms with the requirements is entered, this is checked against a record of login sheet. If the user is already registered access is granted to the program. If th user is a new user they are asked if they have permission to access records. Again a yes or no is required so any other imputs raise an alert to the user. If the user answers yes their name is recorded to the sheet and they are granted access. If the user answers no they are returned to the welcome page. 
 
-![Initial Game Alert](./assets/images/readme-images/alert.png)
+####  Menu
 
-#### Computer area
-  
-The computer area displays a '?' for most of the game as the player is unable to see what numbers the computer is being dealt. Once the computer and the player both select to hold, the total sum of the computer cards is displayed. Once the reset button is selected, this area returns to displaying a '?'. On smaller screen sizes the display and font reduce in size, however the overall look appears the same as on larger devices. 
+The menu page contains 4 options. Again these require specified inputs and anything apart from these will raise an error to the user.
 
-![Computer Area](./assets/images/readme-images/card-area.png)
+The first item in the menu is to identify how many applications are on the system. This returns the number of applications on the system and returns you to the menu. 
 
-#### Play area
+The second allows you to see entries over 6 months old and their index in the spreadsheet. You are then asked if you wish to delete files again with only a y/n answer. Any other input will throw an error. If you select no you are returned to the menu. If yes is selected the index/row you wish to delete should be entered. This must be an integer and cannot be row 1 as this contains the title to the spreadsheet columns. In order to access the correct rows, 2 is added to the index numbers to account for the title page and the fact that sheets start at 1 not 0. Once the row is deleted the program logs out. With increased security and recording methods multiple deletes could be possible but due to the scope of this project one delete was only allowed to a user. 
 
-The play area contains three buttons with different functions. Firstly the reset button resets the game so player and computer are both back to '0'.
+The third option is to access applications with issues such as kids under 6. This gives the user return of the index of unsuitable applications due to young kids in the home. In future development these applications could be moved to another sheet or highlighted in the existing sheet to make management easier. 
 
-The hit button, when selected, will deal a card to the player and the computer (if the computer score is below 17). Once the computer score reaches 17 or above the computer will hold and will not be dealt more cards if the player continues to press hit. This is alerted to the user.
-
-The hold button, when selected by the player means no card is dealt to the player but the computer recieves cards if below 17. Once the computer score reaches 17 it will also display an alert that the computer holds and the game ends. The winner is then revealed. 
-
-On larger screen sizes the buttons are displayed side by side horizontally but for smaller screen sizes they are stacked vertically for ease of use. 
-
-![Play area](./assets/images/readme-images/play-area.png)
-
-#### Player area
-
-The player area again is kept simple in design. It initially displays '0' and each time the player selects hit and a card is dealt the total score for the player is displayed for them. This should help them decide if they want another card to add to this or to hold their score. Once the reset button is selected, this area returns to displaying a '0'. On smaller screen sizes the display and font reduce in size, however the overall look appears the same as on larger devices. 
-
-![Player Area](./assets/images/readme-images/phone.png)
-
-#### Score Area 
-
-The score area records the winners and losers of the games overall. Every time the computer wins a game the computer score increases by one and the same for player score. 
-
-![Score Area](./assets/images/readme-images/score-area.png)
+The fourth option closes the program. 
 
 ## Features left to implement
 
-Additional features could be to build out the game to include a suit of cards. Currently the player recieves a random number between 1 and 12. This could be expanded to include a deck of cards.
-
-The current layout with three potential card areas for both the player and computer could be modified so that individual cards are dealt and held in each separate div. 
+Additional features could be to build out to include a more robust login method with a username and password and record of what occured with login. With this increased security more tasks could be performed for each user for example all applications over 6 months could be deleted. Applications could be highlighted or moved if they do not meet requirements. 
 
 [Back to top](#contents)
 
 ## Technologies Used
-* HTML5 
-* CSS
-* JavaScript
+* Python
 * Gitpod
 * GitHub
-* Google Fonts
-* Font Awesome
-* Google Chrome DevTools
+* Heroku
+* Google Sheets
+* Google Forms
+
+## Libraries Used
+
+* Colorama
+* gspread
+* google.oauth2.service_account
+* datetime
+* dateutil
+* time
 
 ## Testing
 
-This page was tested in different browsers including Safari and Chrome with the full site and links tested across the different platforms. It was tested across several devices including a laptop, iPad and iPhone. 
+I tested my code using [Python Checker] (https://www.pythonchecker.com/). No errors were given. 
 
-All buttons were tested to ensure functionality. The game was run several times to ensure accuracy of functions. Responsiveness was tested and edited using DevTools and then media queries. Responsive design was checked with the 'Am I Responsive' site. 
+I performed several manual tests on all aspects of the program where user input is required. 
 
-![Am I Responsive Result](./assets/images/readme-images/responsive.png)
+On the initial screen a username must be input. This must be between 2 and 15 letters with no other characters. To test this I entered a single letter, combined letters over 15 characters, letters and numbers, single numbers, letters and characters, single characters to ensure that errors were given in all instances. Error messages were given in all instaces and this appears to be functioning well. 
 
-The colour scheme used was identified to be easy to read with contrasting colours and this was tested along with general accessibilty results using the Lighthouse feature on Google Dev Tools. 
+New users are asked if they have permission to access records. This is a simple y/n. Any other input should throw an error back to the user. This again was tested with a wide varity of letters, numbers and characters and appears to be functioning well. Y should bring the user to the menu page and n should return to login page and all appears to be functioning. 
 
-![Accessibility](./assets/images/readme-images/lighthouse.png)
+From the menu page only 4 options are given for input a/d/k/f. Again this was tested with multiple different combinations and all functioning. The respective letters lead to different areas of the program and this was seen on testing. 
 
-[Back to top](#contents)
-
-## Validator Testing
-HTML
-No errors were returned when passing through the official W3C validator
-
-![HTML testing](./assets/images/readme-images/html.png)
-
-CSS
-No errors were found when passing through the official (Jigsaw) validator
-
-![CSS testing](./assets/images/readme-images/css.png)
-
-JavaScript
-No errors were found when passing through the official Jshint validator
-
-![JavaScript testing](./assets/images/readme-images/jshint.png)
+Within the entry date management area there again is a y/n input question which was tested as above to ensure functionality. Another input asks then for an integer to delete a row. This must be an integer and this was tested as above with many different inputs to ensure only a single number can be entered. 
 
 [Back to top](#contents)
 
 ## Bugs
-Through the course of the project several issues were identified and recitified. 
-
-* One font awesome icon was not displaying initially, however it was an issue with it not being a free icon and a different icon chosen. 
-
-* Lighthouse performance was reduced due to no CSS height or width on logo image. CSS rule applied to logo class was changed to img instead. 
-
-* There were several issues initially with functions being over-complicated and returning duplicate numbers for players. With testing using console.logs on dev tools, it was identified what functions were causing the issues and these were modified and retested to ensure they were working correctly. The playerHold, computerHold and gamePlay functions were in certain circumstances causing two numbers to be returned due to them being called in close succession. 
-
-* There was an initial issue with displaying the player and computer score on the appropriate areas. After some research and discussion with tutoring it was discovered that the set inner text for these was returning the global variables not the returned value for player1 and player2. This was rectified. 
-
-[Back to top](#contents)
-
-## Deployment
-
-The site was deployed using GitHub pages. This was performed by navigating to the settings page within the repository. The pages tab on the menu to the left of the screen was opened and the source drop-down menu was changed to main. This generated a link to the site after a few minutes. 
-
-[Back to top](#contents)
-
-## Credits
-
-The love maths project was used as a guide for setting the DOM content loaded function and the functions for keeping computer and player game score.
-
-Some comments from tutoring were also used to rectify issues with the display of the player and user score during the game play. 
-
-[Back to top](#contents)
-
-## Content
-Images were accessed from Pexels (https://www.pexels.com). 
-
-Icons for the play area were accessed at Font Awesome.
-
-Fonts were accessed from Google Fonts. 
-
-Favicon was generated using favicon.io
-
-Laura Walsh 2022
-
 
 issue with login check name-only checking first one- adding duplicates to file-?why
 adding name to spreadsheet- was expecting list[]
@@ -209,4 +130,24 @@ https://stackoverflow.com/questions/52696172/limiting-an-input-between-two-numbe
 
 after delete row- does not update the data from spreadsheet- still shows deleted row fixed with exit()
 https://pypi.org/project/colored/
+
+
+
+[Back to top](#contents)
+
+## Deployment
+
+This project developed on Gitpod and commited and pushed to GitHub and then was deployed using Heroku. An app was created in Heroku using my project name and the region of Europe. Two buildpacks were added in the Settings tab in the order heroku/python and then heroku/nodejs. A Config Car of PORT set to 8000 is also added. Another Config Var called CREDS contains the cred.json contents. In the Deploy tab the method of deployment was through GitHub and GitHub repository was connected to Heroku. The deployement was set to automatic to update the site with each push to GitHub. The branch to deploy is master/main and the site was deployed. 
+
+[Back to top](#contents)
+
+## Credits
+
+The love sandwiches project was used as a guide for setting the Heroku page up and API's.
+
+Some comments from tutoring were also used to rectify issues with dateutil on Heroku and with user input issues. 
+
+[Back to top](#contents)
+
+Laura Walsh 2022
 

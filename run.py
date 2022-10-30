@@ -29,20 +29,20 @@ def get_user():
     """
     Initial prompt to run username input and check that only string between 2 and 15 letters returned
     """
-    print(Back.MAGENTA + 'Enter your name \n')
-    print(Back.CYAN +'Name must be between 2 and 15 letters long, with no numbers or special characters! \n')
-    print(Back.MAGENTA + 'Example: Laura \n')
+    print(Fore.MAGENTA + 'Enter your name')
+    print(Fore.MAGENTA +'Name must be between 2 and 15 letters long, with no numbers or special characters!')
+    print(Fore.MAGENTA + 'Example: Laura \n')
 
     while(True):
         name = input(Fore.CYAN + 'Enter your name here: \n')
         if len(name) > 15:
-            print(Back.RED"Invalid entry! Your name can only be up to 15 letters \n")
+            print(Back.RED + "Invalid entry! Your name can only be up to 15 letters \n")
             get_user()
         elif len(name) <2:
-            print(Back.RED"Invalid entry! Your name must be more than 2 letters \n")
+            print(Back.RED + "Invalid entry! Your name must be more than 2 letters \n")
             get_user()
         elif str.isalpha(name)!= True:
-            print(Back.RED"Invalid entry! Your name must only contain letters\n")
+            print(Back.RED + "Invalid entry! Your name must only contain letters\n")
             get_user()
         else:
             logon_check(name)
@@ -60,18 +60,18 @@ def logon_check(name):
 
     for row in (data):
         if name in data:
-            print (f'You have an account. Welcome back {name} \n')
+            print (Fore.GREEN + f'You have an account. Welcome back {name} \n')
             edit_records()
         elif name not in data:
-            permission= input('New user! Do you have permission to access records? y/n: \n')
+            permission= input(Fore.YELLOW + 'New user! Do you have permission to access records? y/n: \n')
             if permission== 'y':
                 add_user(name)
                 edit_records()
             elif permission == 'n':
-                print ('You do not have access \n')
+                print (Back.RED + 'You do not have access \n')
                 get_user()
             else:
-                print ('INVALID INPUT!')
+                print (Back.RED + 'INVALID INPUT!')
                 logon_check(name)
         break
 
@@ -88,10 +88,10 @@ def edit_records():
     Allows the user to select what they wish to modify
     """
     print('This page allows you to navigate our record management area \n')
-    print('Select "a" to see how many applications are on the system')
-    print('Select "d" to navigate to entry date management')
-    print('Select "k" to navigate to highlight issues with applications')
-    print('Select "f" to end session')
+    print(Fore.BLUE +'Select "a" to see how many applications are on the system')
+    print(Fore.GREEN +'Select "d" to navigate to entry date management')
+    print(Fore.CYAN +'Select "k" to navigate to highlight issues with applications')
+    print(Fore.MAGENTA +'Select "f" to end session')
 
     records = input('Please select a/d/k/f: \n')
     data_remaining= len(dates_list)
@@ -104,9 +104,9 @@ def edit_records():
     elif records == 'k':
         kids_below_6()
     elif records == 'f':
-        get_user()()
+        quit()
     else:
-        print ('INVALID INPUT!')
+        print (Back.RED + 'INVALID INPUT!')
         edit_records()
 
 
@@ -129,8 +129,6 @@ def delete(to_delete, old_data):
     User can use this to find which applications are older than 6 months and delete these
     """
 
-    # can only delete one at a time- records not updating, what if you don't want to delete
-
     if to_delete == 0:
         print('You are up to date. All records are under 6 months old')
         edit_records()
@@ -146,8 +144,6 @@ def delete(to_delete, old_data):
             while True:
                 try:
                     print('Please enter row you wish to delete. You may not delete row 1. No letters or characters!')
-                # print('Please enter separated by commas')
-                # print('Example: 2,4,6,9')
                     delete_row = input('Which row do you wish to delete?')
                     if delete_row.isdigit():
                         delete_row=int(delete_row)
@@ -156,7 +152,7 @@ def delete(to_delete, old_data):
                     if 2 <= delete_row <= 400:
                         print ('Deleting..')
                         response.delete_rows(delete_row)
-                        data_remaining1= (len(dates_list) -1)
+                        data_remaining1= (len(dates_list)-1)
                         print (f'Data up to date. There are {data_remaining1} applications on the system \n')
                         exit()
                     raise ValueError()
