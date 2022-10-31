@@ -227,9 +227,12 @@ def kids_below_6():
         if yes == kids[i]:
             kid_index.append(i+1)
         i +=1
-    
-    print(f'Applicants have said yes to kids under 6 at index {kid_index}')
-    print('These applicants are not suitable for adoptions \n')
+
+    if len(kid_index)== 0:
+        print('There are no unsuitable applications on the system')
+    else:
+        print(f'Applicants have said yes to kids under 6 at index {kid_index}')
+        print('These applicants are not suitable for adoptions \n')
     menu()
 
 get_user()

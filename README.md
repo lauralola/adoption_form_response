@@ -46,7 +46,10 @@ Tha colour scheme was chosen to make the text more easy to discern particularly 
 
 ## Features  
 #### Initial welcome screen and user-name input
-The inital welcome asks for a username to be entered and describes the correct input needed for this. It must be between 2 and 15 letters with only letters used. If a user enters anything not conforming with this an alert is raised and they are asked to enter correct name. Once a name that conforms with the requirements is entered, this is checked against a record of login sheet. If the user is already registered access is granted to the program. If th user is a new user they are asked if they have permission to access records. Again a yes or no is required so any other imputs raise an alert to the user. If the user answers yes their name is recorded to the sheet and they are granted access. If the user answers no they are returned to the welcome page. 
+The inital welcome asks for a username to be entered and describes the correct input needed for this. It must be between 2 and 15 letters with only letters used. If a user enters anything not conforming with this an alert is raised and they are asked to enter correct name. Once a name that conforms with the requirements is entered, this is checked against a record of login sheet. The user input is all changed to lower case to ensure that no matter if capitals used or not this will still be recognised. 
+
+If the user is already registered access is granted to the program. If th user is a new user they are asked if they have permission to access records. Again a yes or no is required so any other imputs raise an alert to the user. If the user answers yes their name is recorded to the sheet and they are granted access. If the user answers no they are returned to the welcome page. 
+
 
 ####  Menu
 
@@ -56,9 +59,9 @@ The first item in the menu is to identify how many applications are on the syste
 
 The second allows you to see entries over 6 months old and their index in the spreadsheet. You are then asked if you wish to delete files again with only a y/n answer. Any other input will throw an error. If you select no you are returned to the menu. If yes is selected the index/row you wish to delete should be entered. This must be an integer and cannot be row 1 as this contains the title to the spreadsheet columns. In order to access the correct rows, 2 is added to the index numbers to account for the title page and the fact that sheets start at 1 not 0. Once the row is deleted the program returns the number of applications left and the row numbers of those older than 6 months and asks again if you would like to delete a row. With increased security and recording methods multiple deletes at one time could be possible but due to the scope of this project one delete was only allowed to a user. 
 
-The third option is to access applications with issues such as kids under 6. This gives the user return of the index of unsuitable applications due to young kids in the home. In future development these applications could be moved to another sheet or highlighted in the existing sheet to make management easier. 
+The third option is to access applications with issues such as kids under 6. This gives the user return of the index of unsuitable applications due to young kids in the home. If there are no unsuitable applicants on the system it informs user of this. In future development these applications could be moved to another sheet or highlighted in the existing sheet to make management easier. 
 
-The fourth option closes the program. 
+The fourth option clears the program and returns to the user login page. 
 
 ## Features left to implement
 
@@ -96,6 +99,8 @@ New users are asked if they have permission to access records. This is a simple 
 From the menu page only 4 options are given for input a/d/k/f. Again this was tested with multiple different combinations and all functioning. The respective letters lead to different areas of the program and this was seen on testing. 
 
 Within the entry date management area there again is a y/n input question which was tested as above to ensure functionality. Another input asks then for an integer to delete a row. This must be an integer and this was tested as above with many different inputs to ensure only a single number can be entered. After a deletion occurs the program returns updated information on the number of applications remaining and the number of records over 6 months. This was tested to ensure accuracy by deleting rows with no records, deleting rows with old data and new data to ensure all returned data was accurate. 
+
+Within the kid function tests were performed to ensure accuracy of data when no applicants have responded yes and when multiple applications are unsuitable. 
 
 After each fucntion there is an option to finish session or return to menu and the user must input m for menu or f to end session. This was tested as above to ensure functionality. 
 
