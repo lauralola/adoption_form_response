@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 import time
 import gspread
 from google.oauth2.service_account import Credentials
+import os
 import colorama
 from colorama import Fore, Back, Style
 
@@ -31,7 +32,7 @@ def get_user():
     print(Fore.MAGENTA + 'Example: Laura \n')
 
     while(True):
-        name = input(Fore.CYAN + 'Enter your name here: \n')
+        name = input(Fore.CYAN + 'Enter your name here: \n').lower()
         if len(name) > 15:
             print(Back.RED + "Invalid entry! Your name can only be up to 15 letters \n")
             get_user()
@@ -79,6 +80,12 @@ def add_user(name):
     logins.append_row([name])
     print('Your details are recorded \n')
 
+def clear_screen():
+    if os.name == 'posix':
+        _= os.system('clear')
+    else:
+        _=os.system('cls')
+
 def edit_records():
     """
     Allows the user to select what they wish to modify. Input is limited to 4 letters
@@ -99,7 +106,8 @@ def edit_records():
     elif records == 'k':
         kids_below_6()
     elif records == 'f':
-        quit()
+        clear_screen()
+        get_user()
     else:
         print (Back.RED + 'INVALID INPUT! Please only enter a/d/k/f')
         edit_records()
@@ -116,7 +124,8 @@ def menu():
     if home == 'm':
         edit_records()
     elif home == 'f':
-        quit()
+        clear_screen()
+        get_user()
     else:
         print (Back.RED + 'INVALID INPUT! Please only enter m/f')
         menu()

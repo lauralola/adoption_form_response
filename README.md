@@ -133,6 +133,8 @@ Some comments from tutoring were also used to rectify issues with dateutil on He
 
 [This](https://stackoverflow.com/questions/52696172/limiting-an-input-between-two-numbers-and-checking-if-the-input-is-a-number-or-n#:~:text=You%20can%20use%20a%20while,%22) helped with resticting integer input to between two numbers for the row_delete function. 
 
+[This](https://appdividend.com/2022/07/14/how-to-clear-screen-in-python/) helped with clearing the screen with finish click.
+
 [Back to top](#contents)
 
 Laura Walsh 2022
